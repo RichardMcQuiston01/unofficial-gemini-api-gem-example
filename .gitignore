@@ -15,6 +15,9 @@ Thumbs.db
 **/node_modules/
 **/dist/
 
+# Example output
+examples/generated-icon.*
+
 # Logs
 *.log
 npm-debug.log*
