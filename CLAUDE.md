@@ -27,10 +27,7 @@ from an app-internal Next.js API route into a standalone library. See
 | Package manager (dev) | Bun |
 | Test runner | TBD at scaffold time (Vitest is the natural fit for a Bun/tsup package) |
 
-## Target Repo Layout
-
-Not yet scaffolded — this is the structure a future implementation
-session should create:
+## Repo Layout
 
 ```
 src/
@@ -39,23 +36,33 @@ src/
   types.ts         # IconGenerationRequest / IconGenerationResult
   index.ts         # public exports (re-exports the above)
 examples/
-  generate-icon.ts # runnable demo — see "Examples" below
+  generate-icon.ts # runnable CLI demo — see "Examples" in README
 assets/
   gem-instructions.txt   # copied verbatim from maker-toolkit
   icon-examples/*.png    # copied verbatim from maker-toolkit
+demo/
+  index.html, src/       # browser SPA demo (Vite + vanilla TS + Tailwind)
+  server/                 # Bun.serve backend: builds a per-request temp
+                           # assets dir (uploaded images + edited prompt)
+                           # and calls generateIcon() via GEMINI_ASSETS_DIR
+                           # — no changes to the package's public API.
+                           # See "Demo" in README for how to run it.
 ```
 
-`assets/` and `examples/` already exist and ship in the git repo, but
-are excluded from the published npm package via `package.json`'s
+`assets/`, `examples/`, and `demo/` all exist and ship in the git repo,
+but are excluded from the published npm package via `package.json`'s
 `"files"` allowlist (`["dist"]`).
 
-## Commands (once scaffolded)
+## Commands
 
 ```bash
 bun install         # install deps
 bun run build        # tsup build → dist/ (ESM + CJS + .d.ts)
-bun run test         # run the test suite
+bun run test         # run the test suite (src/ and demo/server/)
 bun run example       # run examples/generate-icon.ts against a live API key
+bun run demo:build     # build the browser demo (Vite)
+bun run demo:start     # run the demo server (build it first)
+bun run demo:dev       # Vite dev server for demo frontend iteration
 ```
 
 ## Ported API Surface
@@ -163,7 +170,7 @@ from `maker-toolkit`'s (tabs/CRLF); this is an independent package:
 
 ## Status
 
-`assets/gem-instructions.txt` and `assets/icon-examples/*.png` are
-already copied in from maker-toolkit. `package.json`, `tsconfig.json`,
-`src/`, and `examples/generate-icon.ts` do not exist yet — this file is
-the spec for that implementation work.
+The package (`src/`, tests, `tsup` build, `examples/generate-icon.ts`)
+and the browser demo (`demo/`) are both built. Not yet done: Dockerizing
+the demo into a single container (the natural next step once the demo is
+confirmed working end to end with a live API key).

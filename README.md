@@ -29,6 +29,7 @@ Set these as environment variables (e.g. in a `.env` file — see
 | `GEMINI_API_KEY`     | Yes      | Your Google Gemini API key                                              |
 | `GEMINI_IMAGE_MODEL` | No       | Overrides the default image-generation model                            |
 | `GEMINI_ASSETS_DIR`  | No       | Overrides where `gem-instructions.txt` / `icon-examples/` are read from |
+| `DEMO_PORT`          | No       | Port the browser demo server listens on (default `3000`)               |
 
 ## Installation
 
@@ -70,6 +71,29 @@ resulting image to disk. Run it with:
 ```bash
 bun run example
 ```
+
+## Demo
+
+A browser-based SPA demo lives in `demo/`: upload one or more reference
+images (or drag & drop them), edit the system prompt, enter a subject,
+and generate an icon in the browser. It's a separate consumer of this
+package — a temp assets directory is built per request and passed to
+`generateIcon()` via `GEMINI_ASSETS_DIR`, so the demo never touches the
+package's public API.
+
+```bash
+bun run demo:build
+bun run demo:start
+```
+
+Then open `http://localhost:3000` (or `$DEMO_PORT`, see Configuration
+above). For frontend-only iteration with hot reload, run
+`bun run demo:dev` alongside the server (`bun run demo:start`) — the
+Vite dev server proxies `/api` and `/default-assets` requests to it.
+
+Generation requests are processed one at a time (not concurrently, by
+design — see `demo/server/generateQueue.ts`). Docker packaging for the
+demo is planned but not yet implemented.
 
 ## Troubleshooting
 
