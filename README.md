@@ -4,6 +4,9 @@
 Disclaimer: This is an independent, unofficial project (see the "unofficial-" prefix in the name) and is not affiliated with, endorsed by, or sponsored by Google or Gemini. "Gemini" is a trademark of Google LLC, used here only in a descriptive, nominative sense to indicate compatibility — not to imply any official status.
 ```
 
+[![npm version](https://img.shields.io/npm/v/@richardmcquiston01/gemini-icon-gen.svg)](https://www.npmjs.com/package/@richardmcquiston01/gemini-icon-gen)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0/)
+
 ## Overview
 
 TypeScript agnostic NPM package that can be used to generate images using Google's Gemini API. Provide reference image(s) that demonstrate the desired style, colors, and composition. Use the provided sample prompt text as a base and modify as needed.
@@ -41,17 +44,20 @@ npm install @richardmcquiston01/gemini-icon-gen
 
 ## Usage
 
+Set `GEMINI_API_KEY` (see [Configuration](#configuration)), then:
+
 ```ts
 import { generateIcon } from "@richardmcquiston01/gemini-icon-gen";
+import { writeFile } from "node:fs/promises";
 
 const result = await generateIcon({
   subject: "CO2 Laser Engraver",
-  styleNotes: "Include a small flame icon in the corner",
+  styleNotes: "Include a small flame icon in the corner", // optional
 });
 
 if (result.success) {
-  // result.imageData is base64-encoded; result.mimeType e.g. "image/png"
-  // the library never writes to disk — persist it yourself
+  // result.imageData is base64; the library never writes to disk itself.
+  await writeFile("icon.png", Buffer.from(result.imageData ?? "", "base64"));
 } else {
   console.error(result.error);
 }
@@ -59,7 +65,41 @@ if (result.success) {
 
 Reference images (style examples) and the system prompt
 (`gem-instructions.txt`) are read from an assets directory — see
-Configuration above for how to point at your own.
+[Configuration](#configuration) for how to point at your own.
+
+## API reference
+
+### `generateIcon(request)`
+
+```ts
+function generateIcon(
+  request: IconGenerationRequest,
+): Promise<IconGenerationResult>;
+```
+
+Generates a single icon matching the style of the reference images and
+system instructions in the configured assets directory. It never writes
+to disk — persist `imageData` yourself.
+
+**`IconGenerationRequest`**
+
+| Field        | Type     | Required | Description                                                                        |
+| ------------ | -------- | -------- | ---------------------------------------------------------------------------------- |
+| `subject`    | `string` | Yes      | Short label for the subject, e.g. `"CO2 Laser Engraver"`.                           |
+| `styleNotes` | `string` | No       | Extra style notes appended to the prompt, e.g. `"Include a small flame in the corner"`. |
+
+**`IconGenerationResult`**
+
+| Field       | Type      | Description                                                     |
+| ----------- | --------- | -------------------------------------------------------------- |
+| `success`   | `boolean` | Whether an image was generated.                               |
+| `imageData` | `string`  | Base64-encoded image bytes. Present on success.               |
+| `mimeType`  | `string`  | MIME type of `imageData`, e.g. `"image/png"`. Present on success. |
+| `error`     | `string`  | Failure reason. Present when `success` is `false`.            |
+
+The reference images and system prompt are read from an assets directory,
+and the model defaults to `gemini-2.5-flash-image` — both configurable via
+the [environment variables above](#configuration).
 
 ## Examples
 
