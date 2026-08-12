@@ -169,6 +169,27 @@ mapping, e.g. `-p 8080:3000`.
   `.webp` files under `icon-examples/` are read; other extensions are
   skipped silently.
 
+## Releasing (maintainers)
+
+The package is published to npm by the
+[`Release` workflow](.github/workflows/release.yml) whenever a GitHub
+Release is published. To cut a release:
+
+1. Bump `version` in `package.json` and move the `CHANGELOG.md`
+   `[Unreleased]` entries under the new version.
+2. Create a GitHub Release with a tag matching that version, prefixed
+   with `v` (e.g. `v0.1.0`). The workflow fails fast if the tag and
+   `package.json` version disagree.
+3. The workflow installs, runs the tests and build, then
+   `npm publish --provenance --access public`.
+
+**One-time setup:** add an npm automation token as the `NPM_TOKEN`
+repository secret (Settings → Secrets and variables → Actions). The
+package is scoped (`@richardmcquiston01`) and publishes publicly via
+`publishConfig.access`. To publish manually instead, run `npm publish`
+locally with the same token authenticated (`npm whoami` to confirm), but
+drop `--provenance` — provenance can only be generated from CI.
+
 ## License
 
 [Apache-2.0](https://opensource.org/license/apache-2-0/)

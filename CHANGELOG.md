@@ -31,6 +31,14 @@
   lockfile and runs the tests, both typechecks, and the package and demo
   builds on Bun. Tests run without a `GEMINI_API_KEY` since the suite
   mocks the Gemini client.
+- npm publish readiness: `publishConfig.access: "public"` so the scoped
+  package publishes publicly, a `prepublishOnly` build hook, `homepage` /
+  `bugs` / `keywords` metadata, `sideEffects: false` for consumer
+  tree-shaking, and a `Release` workflow (`.github/workflows/release.yml`)
+  that verifies the tag matches `package.json`, runs tests and build, and
+  publishes to npm with provenance on a published GitHub Release. A
+  "Releasing" section in the README documents the flow and the required
+  `NPM_TOKEN` secret.
 
 ### Changed
 

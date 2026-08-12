@@ -12,6 +12,21 @@
     "type": "git",
     "url": "git+https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example.git"
   },
+  "homepage": "https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example#readme",
+  "bugs": {
+    "url": "https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example/issues"
+  },
+  "keywords": [
+    "gemini",
+    "google-gemini",
+    "gemini-api",
+    "image-generation",
+    "icon-generation",
+    "generative-ai",
+    "genai",
+    "ai"
+  ],
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -27,6 +42,7 @@
   },
   "scripts": {
     "build": "tsup",
+    "prepublishOnly": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -51,5 +67,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
