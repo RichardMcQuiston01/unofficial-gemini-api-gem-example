@@ -26,6 +26,11 @@
   --rm -p 3000:3000 -e GEMINI_API_KEY=... gemini-icon-gen-demo`, or
   `docker compose up --build`. `GEMINI_API_KEY` is supplied at run time
   and never baked into the image.
+- Continuous integration via GitHub Actions (`.github/workflows/ci.yml`):
+  on every pull request and push to `main`, installs with a frozen
+  lockfile and runs the tests, both typechecks, and the package and demo
+  builds on Bun. Tests run without a `GEMINI_API_KEY` since the suite
+  mocks the Gemini client.
 
 ### Changed
 

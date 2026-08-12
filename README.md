@@ -4,6 +4,7 @@
 Disclaimer: This is an independent, unofficial project (see the "unofficial-" prefix in the name) and is not affiliated with, endorsed by, or sponsored by Google or Gemini. "Gemini" is a trademark of Google LLC, used here only in a descriptive, nominative sense to indicate compatibility — not to imply any official status.
 ```
 
+[![CI](https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example/actions/workflows/ci.yml/badge.svg)](https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@richardmcquiston01/gemini-icon-gen.svg)](https://www.npmjs.com/package/@richardmcquiston01/gemini-icon-gen)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0/)
 
