@@ -92,8 +92,30 @@ above). For frontend-only iteration with hot reload, run
 Vite dev server proxies `/api` and `/default-assets` requests to it.
 
 Generation requests are processed one at a time (not concurrently, by
-design — see `demo/server/generateQueue.ts`). Docker packaging for the
-demo is planned but not yet implemented.
+design — see `demo/server/generateQueue.ts`).
+
+### Running the demo in Docker
+
+The demo is also packaged as a single, self-contained container. The
+image builds the frontend and runs the Bun server; no local Bun or
+Node.js install is required — only Docker and a Gemini API key.
+
+```bash
+docker build -t gemini-icon-gen-demo .
+docker run --rm -p 3000:3000 -e GEMINI_API_KEY=your-key gemini-icon-gen-demo
+```
+
+Or, with Docker Compose (loads `GEMINI_API_KEY` — and optionally
+`GEMINI_IMAGE_MODEL` / `DEMO_PORT` — from a `.env` file automatically):
+
+```bash
+docker compose up --build
+```
+
+Then open `http://localhost:3000`. `GEMINI_API_KEY` must be supplied at
+run time — it is never baked into the image. To expose the demo on a
+different host port, set `DEMO_PORT` (Compose) or change the `-p`
+mapping, e.g. `-p 8080:3000`.
 
 ## Troubleshooting
 

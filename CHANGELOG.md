@@ -19,3 +19,10 @@
   via `GEMINI_ASSETS_DIR` — no changes to the package's public API.
   Requests are serialized (one generation at a time). Run with
   `bun run demo:build && bun run demo:start`.
+- Docker packaging for the browser demo: a multi-stage `Dockerfile`
+  (builds the Vite frontend, then runs the Bun server in a slim runtime
+  image) plus a `.dockerignore` and a `docker-compose.yml` convenience
+  wrapper. Run with `docker build -t gemini-icon-gen-demo . && docker run
+  --rm -p 3000:3000 -e GEMINI_API_KEY=... gemini-icon-gen-demo`, or
+  `docker compose up --build`. `GEMINI_API_KEY` is supplied at run time
+  and never baked into the image.
