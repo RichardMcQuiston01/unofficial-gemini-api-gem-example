@@ -1,0 +1,55 @@
+{
+  "name": "@richardmcquiston01/gemini-icon-gen",
+  "version": "0.1.0",
+  "description": "Generate style-consistent icons with Google's Gemini image API, the same way a Gemini \"Gem\" does — system instructions plus reference images in, a matching icon out.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Richard McQuiston",
+    "email": "richard.mcquiston01@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "example": "bun run examples/generate-icon.ts",
+    "demo:dev": "vite --config demo/vite.config.ts",
+    "demo:build": "vite build --config demo/vite.config.ts",
+    "demo:start": "bun run demo/server/index.ts",
+    "demo:typecheck": "tsc --noEmit -p demo/tsconfig.json && tsc --noEmit -p demo/server/tsconfig.json"
+  },
+  "dependencies": {
+    "@google/genai": "^1.46.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/bun": "^1.3.14",
+    "@types/node": "^24.0.0",
+    "tailwindcss": "^4.3.3",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0",
+    "vite": "^8.2.1",
+    "vitest": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
