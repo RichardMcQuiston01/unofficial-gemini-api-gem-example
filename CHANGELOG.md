@@ -26,3 +26,10 @@
   --rm -p 3000:3000 -e GEMINI_API_KEY=... gemini-icon-gen-demo`, or
   `docker compose up --build`. `GEMINI_API_KEY` is supplied at run time
   and never baked into the image.
+
+### Changed
+
+- README polish: added npm-version and license badges, a `generateIcon()`
+  API reference (request/result field tables and the default model name),
+  and a tightened quickstart with a runnable persist-to-disk snippet and
+  cross-links to Configuration.
