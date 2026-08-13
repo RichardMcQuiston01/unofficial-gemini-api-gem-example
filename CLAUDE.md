@@ -159,22 +159,42 @@ from `maker-toolkit`'s (tabs/CRLF); this is an independent package:
 
 ## Publishing (per the `npm-registry` skill)
 
-- Scope: `@richardmcquiston01`. `package.json` author email:
+Publishing is automated by the `Release` workflow
+(`.github/workflows/release.yml`), which runs when a **GitHub Release is
+published**:
+
+- It verifies the release tag (`vX.Y.Z`) matches `package.json`'s
+  `version`, runs the tests and build, then
+  `npm publish --provenance --access public`.
+- Auth is the `NPM_TOKEN` repository secret; provenance relies on the
+  workflow's `id-token: write` permission.
+- The package is scoped (`@richardmcquiston01`) and publishes publicly
+  via `publishConfig.access: "public"`. `package.json` author email:
   `richard.mcquiston01@gmail.com`.
-- Keep `README.md` current with every feature addition (prerequisites,
-  installation, usage).
-- Update `CHANGELOG.md` before opening any PR.
-- Final testing happens merged into `staging`.
-- To publish: bump the version and update `CHANGELOG.md`, then PR into
-  `release`.
+
+To cut a release:
+
+1. Bump `version` in `package.json` and move the `CHANGELOG.md`
+   `[Unreleased]` entries under a new dated `## [x.y.z]` heading.
+2. Merge that to `main`.
+3. Create a GitHub Release from `main` with a tag matching the version,
+   prefixed with `v` (e.g. `v0.1.0`) — the workflow publishes from there.
+
+There is no `staging` or `release` branch; releases are cut from `main`
+(the default branch). Keep `README.md` and `CHANGELOG.md` current with
+every feature addition — see the README's "Releasing (maintainers)"
+section for the same flow.
 
 ## Status
 
 The package (`src/`, tests, `tsup` build, `examples/generate-icon.ts`)
-and the browser demo (`demo/`) are both built. The demo is also packaged
-as a single container: a multi-stage `Dockerfile` (builds the Vite
-frontend, then runs the Bun server in a slim runtime image), plus a
-`.dockerignore` and a `docker-compose.yml` convenience wrapper — see
-"Running the demo in Docker" in the README. Remaining: confirm the
+and the browser demo (`demo/`, including a user-entered Gemini API key
+and a donation card) are both built. The demo is also packaged as a
+single container: a multi-stage `Dockerfile` (builds the Vite frontend,
+then runs the Bun server in a slim runtime image), plus a `.dockerignore`
+and a `docker-compose.yml` convenience wrapper — see "Running the demo in
+Docker" in the README. CI runs on every PR/push
+(`.github/workflows/ci.yml`), and publishing is automated by the
+`Release` workflow (see "Publishing" above). Remaining: confirm the
 container end to end with a live API key (blocked in CI environments that
 can't reach Docker Hub to pull the `oven/bun` base images).
