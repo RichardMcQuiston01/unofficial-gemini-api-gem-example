@@ -7,7 +7,10 @@ type ImageEntry =
 
 const SUPPORTED_IMAGE_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
 
+const API_KEY_STORAGE_KEY = 'gemini-icon-gen:api-key';
+
 const form = document.getElementById('generate-form') as HTMLFormElement;
+const apiKeyField = document.getElementById('api-key') as HTMLInputElement;
 const dropzone = document.getElementById('dropzone') as HTMLDivElement;
 const fileInput = document.getElementById('file-input') as HTMLInputElement;
 const thumbnailList = document.getElementById('thumbnail-list') as HTMLUListElement;
@@ -127,6 +130,7 @@ form.addEventListener('submit', async (event) => {
     const result = await generate({
       subject,
       styleNotes: styleNotesField.value.trim() || undefined,
+      apiKey: apiKeyField.value.trim() || undefined,
       prompt: promptField.value,
       images: files,
     });
@@ -158,6 +162,23 @@ form.addEventListener('submit', async (event) => {
     renderResult(error instanceof Error ? error.message : 'Icon generation failed.');
   } finally {
     setBusy(false);
+  }
+});
+
+// Persist the API key in the browser so it survives reloads. Wrapped in
+// try/catch because localStorage can throw (private mode, blocked storage).
+try {
+  const savedKey = localStorage.getItem(API_KEY_STORAGE_KEY);
+  if (savedKey) apiKeyField.value = savedKey;
+} catch {
+  /* storage unavailable — the field just starts empty */
+}
+apiKeyField.addEventListener('input', () => {
+  try {
+    if (apiKeyField.value) localStorage.setItem(API_KEY_STORAGE_KEY, apiKeyField.value);
+    else localStorage.removeItem(API_KEY_STORAGE_KEY);
+  } catch {
+    /* storage unavailable — persistence is best-effort */
   }
 });
 

@@ -26,6 +26,7 @@ export async function generate(input: GenerateInput): Promise<IconGenerationResu
   const formData = new FormData();
   formData.set('subject', input.subject);
   if (input.styleNotes) formData.set('styleNotes', input.styleNotes);
+  if (input.apiKey) formData.set('apiKey', input.apiKey);
   formData.set('prompt', input.prompt);
   for (const image of input.images) {
     formData.append('images', image, image.name);

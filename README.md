@@ -88,6 +88,7 @@ to disk — persist `imageData` yourself.
 | ------------ | -------- | -------- | ---------------------------------------------------------------------------------- |
 | `subject`    | `string` | Yes      | Short label for the subject, e.g. `"CO2 Laser Engraver"`.                           |
 | `styleNotes` | `string` | No       | Extra style notes appended to the prompt, e.g. `"Include a small flame in the corner"`. |
+| `apiKey`     | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.               |
 
 **`IconGenerationResult`**
 
@@ -115,12 +116,17 @@ bun run example
 
 ## Demo
 
-A browser-based SPA demo lives in `demo/`: upload one or more reference
-images (or drag & drop them), edit the system prompt, enter a subject,
-and generate an icon in the browser. It's a separate consumer of this
-package — a temp assets directory is built per request and passed to
-`generateIcon()` via `GEMINI_ASSETS_DIR`, so the demo never touches the
-package's public API.
+A browser-based SPA demo lives in `demo/`: enter your Gemini API key,
+upload one or more reference images (or drag & drop them), edit the
+system prompt, enter a subject, and generate an icon in the browser.
+It's a separate consumer of this package — a temp assets directory is
+built per request and passed to `generateIcon()` via `GEMINI_ASSETS_DIR`,
+so the demo never touches the package's public API.
+
+The API key can be entered in the page (it's stored only in your browser
+and sent with each request) — so you don't need `GEMINI_API_KEY` set on
+the server. If the server _does_ have `GEMINI_API_KEY` set, leaving the
+field blank falls back to it.
 
 ```bash
 bun run demo:build
@@ -139,7 +145,8 @@ design — see `demo/server/generateQueue.ts`).
 
 The demo is also packaged as a single, self-contained container. The
 image builds the frontend and runs the Bun server; no local Bun or
-Node.js install is required — only Docker and a Gemini API key.
+Node.js install is required — just Docker (and a Gemini API key, which
+you can either pass in or enter in the page).
 
 ```bash
 docker build -t gemini-icon-gen-demo .
@@ -153,10 +160,11 @@ Or, with Docker Compose (loads `GEMINI_API_KEY` — and optionally
 docker compose up --build
 ```
 
-Then open `http://localhost:3000`. `GEMINI_API_KEY` must be supplied at
-run time — it is never baked into the image. To expose the demo on a
-different host port, set `DEMO_PORT` (Compose) or change the `-p`
-mapping, e.g. `-p 8080:3000`.
+Then open `http://localhost:3000`. `GEMINI_API_KEY` is optional — omit it
+and enter a key in the page instead; when supplied it is passed at run
+time and never baked into the image. To expose the demo on a different
+host port, set `DEMO_PORT` (Compose) or change the `-p` mapping, e.g.
+`-p 8080:3000`.
 
 ## Troubleshooting
 
