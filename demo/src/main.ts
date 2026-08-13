@@ -161,6 +161,11 @@ form.addEventListener('submit', async (event) => {
   }
 });
 
+const donateCard = document.getElementById('donate-card');
+document
+  .getElementById('donate-dismiss')
+  ?.addEventListener('click', () => donateCard?.remove());
+
 (async function init() {
   try {
     const defaults = await fetchDefaults();
