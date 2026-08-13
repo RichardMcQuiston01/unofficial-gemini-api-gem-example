@@ -45,8 +45,8 @@
 - Optional per-request `apiKey` on `IconGenerationRequest`, overriding the
   `GEMINI_API_KEY` env var (an explicit key yields a fresh, non-memoized
   client). The browser demo uses this to let users enter their own Gemini
-  API key in the page — persisted only in the browser and sent with each
-  request — so the server no longer needs `GEMINI_API_KEY` set. If the
+  API key in the page — kept only in the page (not stored) and sent with
+  each request — so the server no longer needs `GEMINI_API_KEY` set. If the
   server does have one configured, leaving the field blank falls back to
   it; `docker-compose.yml` now treats the key as optional too.
 

@@ -123,10 +123,10 @@ It's a separate consumer of this package — a temp assets directory is
 built per request and passed to `generateIcon()` via `GEMINI_ASSETS_DIR`,
 so the demo never touches the package's public API.
 
-The API key can be entered in the page (it's stored only in your browser
-and sent with each request) — so you don't need `GEMINI_API_KEY` set on
-the server. If the server _does_ have `GEMINI_API_KEY` set, leaving the
-field blank falls back to it.
+The API key can be entered in the page (kept only in the page and sent
+with each request — it isn't stored, so re-enter it after a reload) — so
+you don't need `GEMINI_API_KEY` set on the server. If the server _does_
+have `GEMINI_API_KEY` set, leaving the field blank falls back to it.
 
 ```bash
 bun run demo:build
