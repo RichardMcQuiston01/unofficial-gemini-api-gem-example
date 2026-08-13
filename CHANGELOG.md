@@ -39,6 +39,9 @@
   publishes to npm with provenance on a published GitHub Release. A
   "Releasing" section in the README documents the flow and the required
   `NPM_TOKEN` secret.
+- Dismissible floating donation card in the browser demo: an inline,
+  scannable QR code (generated from the donation URL) and a clickable
+  card linking to the Stripe donation page, with a close button.
 
 ### Changed
 
