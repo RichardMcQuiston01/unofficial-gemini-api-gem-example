@@ -42,6 +42,13 @@
 - Dismissible floating donation card in the browser demo: an inline,
   scannable QR code (generated from the donation URL) and a clickable
   card linking to the Stripe donation page, with a close button.
+- Optional per-request `apiKey` on `IconGenerationRequest`, overriding the
+  `GEMINI_API_KEY` env var (an explicit key yields a fresh, non-memoized
+  client). The browser demo uses this to let users enter their own Gemini
+  API key in the page — kept only in the page (not stored) and sent with
+  each request — so the server no longer needs `GEMINI_API_KEY` set. If the
+  server does have one configured, leaving the field blank falls back to
+  it; `docker-compose.yml` now treats the key as optional too.
 
 ### Changed
 

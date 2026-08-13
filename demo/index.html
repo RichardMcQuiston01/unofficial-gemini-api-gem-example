@@ -21,6 +21,28 @@
 
           <form id="generate-form" class="space-y-6">
           <div>
+            <label for="api-key" class="mb-2 block text-sm font-medium">Gemini API key</label>
+            <input
+              id="api-key"
+              type="password"
+              autocomplete="off"
+              placeholder="AIza…"
+              class="w-full rounded-lg border border-neutral-300 p-2.5 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
+            />
+            <p class="mt-1 text-xs text-neutral-500">
+              Used only for your requests and kept only on this page — it isn't
+              stored, so re-enter it after a reload. Get one at
+              <a
+                href="https://ai.google.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-brand-700 underline"
+                >ai.google.dev</a
+              >. Leave blank if the server already has a key configured.
+            </p>
+          </div>
+
+          <div>
             <span class="mb-2 block text-sm font-medium">Reference images</span>
             <div
               id="dropzone"
