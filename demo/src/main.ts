@@ -8,6 +8,7 @@ type ImageEntry =
 const SUPPORTED_IMAGE_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
 
 const form = document.getElementById('generate-form') as HTMLFormElement;
+const apiKeyField = document.getElementById('api-key') as HTMLInputElement;
 const dropzone = document.getElementById('dropzone') as HTMLDivElement;
 const fileInput = document.getElementById('file-input') as HTMLInputElement;
 const thumbnailList = document.getElementById('thumbnail-list') as HTMLUListElement;
@@ -127,6 +128,7 @@ form.addEventListener('submit', async (event) => {
     const result = await generate({
       subject,
       styleNotes: styleNotesField.value.trim() || undefined,
+      apiKey: apiKeyField.value.trim() || undefined,
       prompt: promptField.value,
       images: files,
     });
@@ -160,6 +162,11 @@ form.addEventListener('submit', async (event) => {
     setBusy(false);
   }
 });
+
+const donateCard = document.getElementById('donate-card');
+document
+  .getElementById('donate-dismiss')
+  ?.addEventListener('click', () => donateCard?.remove());
 
 (async function init() {
   try {

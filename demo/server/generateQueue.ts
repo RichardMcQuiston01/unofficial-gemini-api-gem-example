@@ -91,7 +91,11 @@ export function generateWithUploads(input: GenerateWithUploadsInput): Promise<Ic
     const dir = await buildTempAssetsDir(input.prompt, input.images);
     try {
       process.env.GEMINI_ASSETS_DIR = dir;
-      return await generateIcon({ subject: input.subject, styleNotes: input.styleNotes });
+      return await generateIcon({
+        subject: input.subject,
+        styleNotes: input.styleNotes,
+        apiKey: input.apiKey,
+      });
     } finally {
       await fs.rm(dir, { recursive: true, force: true }).catch(() => {});
     }

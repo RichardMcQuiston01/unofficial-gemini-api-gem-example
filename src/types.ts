@@ -4,6 +4,12 @@ export interface IconGenerationRequest {
   subject: string;
   /** Optional additional style notes appended to the prompt */
   styleNotes?: string;
+  /**
+   * Optional Gemini API key for this request. Overrides the
+   * `GEMINI_API_KEY` environment variable; useful when a single process
+   * serves multiple keys.
+   */
+  apiKey?: string;
 }
 
 /** Output of {@link generateIcon}. */

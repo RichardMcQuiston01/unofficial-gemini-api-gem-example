@@ -171,6 +171,10 @@ from `maker-toolkit`'s (tabs/CRLF); this is an independent package:
 ## Status
 
 The package (`src/`, tests, `tsup` build, `examples/generate-icon.ts`)
-and the browser demo (`demo/`) are both built. Not yet done: Dockerizing
-the demo into a single container (the natural next step once the demo is
-confirmed working end to end with a live API key).
+and the browser demo (`demo/`) are both built. The demo is also packaged
+as a single container: a multi-stage `Dockerfile` (builds the Vite
+frontend, then runs the Bun server in a slim runtime image), plus a
+`.dockerignore` and a `docker-compose.yml` convenience wrapper — see
+"Running the demo in Docker" in the README. Remaining: confirm the
+container end to end with a live API key (blocked in CI environments that
+can't reach Docker Hub to pull the `oven/bun` base images).

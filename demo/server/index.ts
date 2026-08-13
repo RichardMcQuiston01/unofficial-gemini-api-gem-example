@@ -10,10 +10,9 @@ const DEFAULT_ASSETS_DIR = path.join(REPO_ROOT, 'assets', 'icon-examples');
 const DEFAULT_PROMPT_PATH = path.join(REPO_ROOT, 'assets', 'gem-instructions.txt');
 
 if (!process.env.GEMINI_API_KEY) {
-  console.error(
-    'GEMINI_API_KEY is not set. Set it in your .env file before starting the demo server.',
+  console.warn(
+    'GEMINI_API_KEY is not set — the demo will require a key to be entered in the page for each request.',
   );
-  process.exit(1);
 }
 
 if (!(await Bun.file(path.join(DIST_DIR, 'index.html')).exists())) {
@@ -51,10 +50,25 @@ async function handleGenerate(req: Request): Promise<Response> {
   const subject = formData.get('subject');
   const styleNotes = formData.get('styleNotes');
   const prompt = formData.get('prompt');
+  const apiKeyField = formData.get('apiKey');
 
   if (typeof subject !== 'string' || !subject.trim() || typeof prompt !== 'string') {
     return Response.json(
       { success: false, error: 'subject and prompt are required.' },
+      { status: 400 },
+    );
+  }
+
+  // A key entered in the page wins; otherwise fall back to the server's
+  // GEMINI_API_KEY (if the operator configured one). generateIcon() reads
+  // the env var itself, so an undefined apiKey here uses that fallback.
+  const apiKey = typeof apiKeyField === 'string' && apiKeyField.trim() ? apiKeyField.trim() : undefined;
+  if (!apiKey && !process.env.GEMINI_API_KEY) {
+    return Response.json(
+      {
+        success: false,
+        error: 'A Gemini API key is required. Enter one in the form, or set GEMINI_API_KEY on the server.',
+      },
       { status: 400 },
     );
   }
@@ -70,6 +84,7 @@ async function handleGenerate(req: Request): Promise<Response> {
     styleNotes: typeof styleNotes === 'string' && styleNotes.trim() ? styleNotes : undefined,
     prompt,
     images,
+    apiKey,
   }).catch((err) => ({
     success: false as const,
     error: err instanceof Error ? err.message : String(err),

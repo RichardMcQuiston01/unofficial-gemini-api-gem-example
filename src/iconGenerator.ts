@@ -66,7 +66,7 @@ async function loadGemInstructions(dir: string): Promise<string> {
 export async function generateIcon(
   request: IconGenerationRequest,
 ): Promise<IconGenerationResult> {
-  const client = getGeminiClient();
+  const client = getGeminiClient(request.apiKey);
   const model = process.env.GEMINI_IMAGE_MODEL ?? DEFAULT_MODEL;
   const dir = assetsDir();
 

@@ -1,0 +1,17 @@
+# Convenience wrapper around the demo Dockerfile.
+#
+#   GEMINI_API_KEY=your-key docker compose up --build
+#
+# or put GEMINI_API_KEY (and optionally GEMINI_IMAGE_MODEL / DEMO_PORT) in a
+# .env file next to this one — Compose loads it automatically. The key is
+# optional here: omit it and enter one in the page instead.
+services:
+  demo:
+    build: .
+    ports:
+      - "${DEMO_PORT:-3000}:3000"
+    environment:
+      # Optional — if unset, enter a key in the page for each request.
+      GEMINI_API_KEY: "${GEMINI_API_KEY:-}"
+      # Optional — overrides the default image-generation model.
+      GEMINI_IMAGE_MODEL: "${GEMINI_IMAGE_MODEL:-}"

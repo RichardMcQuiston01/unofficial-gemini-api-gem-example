@@ -53,6 +53,21 @@ describe('generateIcon', () => {
     );
   });
 
+  it('uses an explicit apiKey when GEMINI_API_KEY is not set', async () => {
+    delete process.env.GEMINI_API_KEY;
+    process.env.GEMINI_ASSETS_DIR = tmpDir;
+    mockGenerateContent.mockResolvedValue({
+      candidates: [
+        { content: { parts: [{ inlineData: { mimeType: 'image/png', data: 'abc' } }] } },
+      ],
+    });
+    const generateIcon = await freshGenerateIcon();
+
+    const result = await generateIcon({ subject: 'Widget', apiKey: 'explicit-key' });
+
+    expect(result).toEqual({ success: true, imageData: 'abc', mimeType: 'image/png' });
+  });
+
   it('warns and continues with no reference images when icon-examples/ is missing', async () => {
     process.env.GEMINI_ASSETS_DIR = tmpDir;
     mockGenerateContent.mockResolvedValue({
