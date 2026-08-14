@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+### Added
+
+- Vercel deployment for the browser demo: web-handler serverless functions
+  (`api/defaults.ts`, `api/generate.ts`) that reuse the demo's serialized
+  `generateWithUploads` (writing per-request temp assets under `/tmp`), plus
+  a `vercel.json` that builds the Vite frontend and serves it statically.
+  The user-entered API key means no server-side `GEMINI_API_KEY` is
+  required.
+
+### Changed
+
+- Refreshed the demo's floating donation card to a horizontal layout — QR
+  code on the left, message on the right, and a "Donate via Stripe →" link.
+
 ## [0.1.0] - 2026-08-13
 
 ### Added
