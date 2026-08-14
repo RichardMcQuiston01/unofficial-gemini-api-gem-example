@@ -8,6 +8,8 @@ Disclaimer: This is an independent, unofficial project (see the "unofficial-" pr
 [![npm version](https://img.shields.io/npm/v/@richardmcquiston01/gemini-icon-gen.svg)](https://www.npmjs.com/package/@richardmcquiston01/gemini-icon-gen)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0/)
 
+**🔗 Live demo: [gemini-icon-gen.vercel.app](https://gemini-icon-gen.vercel.app/)** — try it in your browser with your own Gemini API key.
+
 ## Overview
 
 TypeScript agnostic NPM package that can be used to generate images using Google's Gemini API. Provide reference image(s) that demonstrate the desired style, colors, and composition. Use the provided sample prompt text as a base and modify as needed.
@@ -123,6 +125,10 @@ It's a separate consumer of this package — a temp assets directory is
 built per request and passed to `generateIcon()` via `GEMINI_ASSETS_DIR`,
 so the demo never touches the package's public API.
 
+A hosted version runs on Vercel at
+**[gemini-icon-gen.vercel.app](https://gemini-icon-gen.vercel.app/)** (see
+"Deploying the demo to Vercel" below). To run it locally instead:
+
 The API key can be entered in the page (kept only in the page and sent
 with each request — it isn't stored, so re-enter it after a reload) — so
 you don't need `GEMINI_API_KEY` set on the server. If the server _does_
@@ -165,6 +171,21 @@ and enter a key in the page instead; when supplied it is passed at run
 time and never baked into the image. To expose the demo on a different
 host port, set `DEMO_PORT` (Compose) or change the `-p` mapping, e.g.
 `-p 8080:3000`.
+
+### Deploying the demo to Vercel
+
+The demo also ships a Vercel-native variant so it can run without the Bun
+server. `vercel.json` builds the Vite frontend (`demo:build` →
+`demo/dist`) and serves it statically, and the `api/` directory holds two
+serverless functions — `api/defaults.ts` (the default prompt) and
+`api/generate.ts` (icon generation, reusing the same serialized
+`generateWithUploads` as the Bun server). Import the repository at
+[vercel.com/new](https://vercel.com/new) and deploy — `vercel.json`
+supplies the build settings, so no manual configuration is needed. No
+`GEMINI_API_KEY` env var is required: visitors enter their own key in the
+page (set one on the project only if you want a server-side fallback). The
+live deployment is at
+[gemini-icon-gen.vercel.app](https://gemini-icon-gen.vercel.app/).
 
 ## Troubleshooting
 
