@@ -9,7 +9,9 @@
   `generateWithUploads` (writing per-request temp assets under `/tmp`), plus
   a `vercel.json` that builds the Vite frontend and serves it statically.
   The user-entered API key means no server-side `GEMINI_API_KEY` is
-  required.
+  required. Live at
+  [gemini-icon-gen.vercel.app](https://gemini-icon-gen.vercel.app/); the
+  README documents the deploy flow ("Deploying the demo to Vercel").
 
 ### Changed
 
