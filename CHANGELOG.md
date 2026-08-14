@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-08-13
+
 ### Added
 
 - Initial package scaffold: `generateIcon()` ported from crafterkit's
