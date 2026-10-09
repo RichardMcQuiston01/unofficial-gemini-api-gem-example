@@ -11,10 +11,14 @@
   The user-entered API key means no server-side `GEMINI_API_KEY` is
   required. Live at
   [gemini-icon-gen.vercel.app](https://gemini-icon-gen.vercel.app/); the
-  README documents the deploy flow ("Deploying the demo to Vercel").
+  deploy flow is documented in `docs/DEMO.md`.
 
 ### Changed
 
+- README: rewrote the Overview in plainer language, moved Docker/Vercel demo
+  instructions to `docs/DEMO.md`, added a header with author/website/demo/
+  email links, removed the Releasing section, and replaced Support/Contact
+  with the standard "Buy Me a Coffee" donate block (`donate.svg`).
 - Refreshed the demo's floating donation card to a horizontal layout — QR
   code on the left, message on the right, and a "Donate via Stripe →" link.
 
