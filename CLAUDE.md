@@ -33,7 +33,9 @@ from an app-internal Next.js API route into a standalone library. See
 src/
   client.ts        # GoogleGenAI singleton, reads GEMINI_API_KEY
   iconGenerator.ts # generateIcon() — the package's core export
-  types.ts         # IconGenerationRequest / IconGenerationResult
+  textGenerator.ts # generateText() — Gem-style text transformation
+  assetsDir.ts     # shared assets dir resolution
+  types.ts         # Icon*/Text* request and result types
   index.ts         # public exports (re-exports the above)
 examples/
   generate-icon.ts # runnable CLI demo — see "Examples" in README
@@ -138,13 +140,14 @@ export interface IconGenerationResult {
 |---|---|---|
 | `GEMINI_API_KEY` | Yes | Google Gemini API key |
 | `GEMINI_IMAGE_MODEL` | No | Overrides the default image-generation model |
-| `GEMINI_ASSETS_DIR` | No | Overrides where `gem-instructions.txt` / `icon-examples/` are read from |
+| `GEMINI_TEXT_MODEL` | No | Overrides the default text-generation model (`generateText`) |
+| `GEMINI_ASSETS_DIR` | No | Overrides where `gem-instructions.txt` / `icon-examples/` / `text-instructions.txt` are read from |
 
 **Gotcha carried forward from the port:** crafterkit had two disagreeing
 default model names — `gemini-2.5-flash-image` in the generator itself
 vs. `gemini-2.5-flash-preview-05-20` in an app-specific rate-limit check
 that isn't being ported. This package should have exactly **one**
-configurable default; don't reintroduce a second hardcoded model name
+configurable default per model kind (image, text); don't reintroduce a second hardcoded model name
 anywhere.
 
 ## Coding Conventions

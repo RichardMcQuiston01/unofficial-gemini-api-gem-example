@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import { assetsDir } from './assetsDir';
 import { getGeminiClient } from './client';
 import type { IconGenerationRequest, IconGenerationResult } from './types';
 
@@ -11,17 +12,6 @@ const SUPPORTED_IMAGE_TYPES: Record<string, string> = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
 };
-
-/**
- * Resolves the directory `gem-instructions.txt` and `icon-examples/` are
- * read from: `GEMINI_ASSETS_DIR` if set, else this package's own bundled
- * `assets/` directory (one level up from this module, in both `src/`
- * during development and `dist/` after build).
- */
-function assetsDir(): string {
-  const env = process.env.GEMINI_ASSETS_DIR;
-  return env ? path.resolve(env) : path.join(__dirname, '../assets');
-}
 
 async function loadExampleImageParts(dir: string) {
   let entries: string[];
