@@ -46,7 +46,7 @@ demo/
                            # assets dir (uploaded images + edited prompt)
                            # and calls generateIcon() via GEMINI_ASSETS_DIR
                            # — no changes to the package's public API.
-                           # See "Demo" in README for how to run it.
+                           # See docs/DEMO.md for how to run it.
 ```
 
 `assets/`, `examples/`, and `demo/` all exist and ship in the git repo,
@@ -182,8 +182,7 @@ To cut a release:
 
 There is no `staging` or `release` branch; releases are cut from `main`
 (the default branch). Keep `README.md` and `CHANGELOG.md` current with
-every feature addition — see the README's "Releasing (maintainers)"
-section for the same flow.
+every feature addition.
 
 ## Status
 
@@ -192,8 +191,7 @@ and the browser demo (`demo/`, including a user-entered Gemini API key
 and a donation card) are both built. The demo is also packaged as a
 single container: a multi-stage `Dockerfile` (builds the Vite frontend,
 then runs the Bun server in a slim runtime image), plus a `.dockerignore`
-and a `docker-compose.yml` convenience wrapper — see "Running the demo in
-Docker" in the README. CI runs on every PR/push
+and a `docker-compose.yml` convenience wrapper — see docs/DEMO.md. CI runs on every PR/push
 (`.github/workflows/ci.yml`), and publishing is automated by the
 `Release` workflow (see "Publishing" above). Remaining: confirm the
 container end to end with a live API key (blocked in CI environments that
