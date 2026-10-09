@@ -40,7 +40,8 @@ Set these as environment variables (e.g. in a `.env` file — see
 | -------------------- | -------- | ----------------------------------------------------------------------- |
 | `GEMINI_API_KEY`     | Yes      | Your Google Gemini API key                                              |
 | `GEMINI_IMAGE_MODEL` | No       | Overrides the default image-generation model                            |
-| `GEMINI_ASSETS_DIR`  | No       | Overrides where `gem-instructions.txt` / `icon-examples/` are read from |
+| `GEMINI_TEXT_MODEL`  | No       | Overrides the default text-generation model                             |
+| `GEMINI_ASSETS_DIR`  | No       | Overrides where `gem-instructions.txt` / `icon-examples/` / `text-instructions.txt` are read from |
 | `DEMO_PORT`          | No       | Port the browser demo server listens on (default `3000`)               |
 
 ## Installation
@@ -76,6 +77,30 @@ Reference images (style examples) and the system prompt
 (`gem-instructions.txt`) are read from an assets directory — see
 [Configuration](#configuration) for how to point at your own.
 
+### Transforming text
+
+`generateText()` is the text version of `generateIcon()`. A base prompt
+works like a Gem's instructions, and your input text is rewritten to
+match. The bundled default turns a product description into a short
+Facebook post.
+
+```ts
+import { generateText } from "@richardmcquiston01/gemini-icon-gen";
+
+const result = await generateText({
+  input: "Handmade soy candle, 8oz, lavender and cedarwood scent.",
+});
+
+if (result.success) {
+  console.log(result.text);
+} else {
+  console.error(result.error);
+}
+```
+
+The base prompt is read from `text-instructions.txt` in the assets
+directory, or pass `instructions` to set it per call.
+
 ## API reference
 
 ### `generateIcon(request)`
@@ -107,6 +132,23 @@ to disk — persist `imageData` yourself.
 | `mimeType`  | `string`  | MIME type of `imageData`, e.g. `"image/png"`. Present on success. |
 | `error`     | `string`  | Failure reason. Present when `success` is `false`.            |
 
+### `generateText(request)`
+
+```ts
+function generateText(
+  request: TextGenerationRequest,
+): Promise<TextGenerationResult>;
+```
+
+| Field          | Type     | Required | Description                                                                |
+| -------------- | -------- | -------- | -------------------------------------------------------------------------- |
+| `input`        | `string` | Yes      | The text to transform.                                                     |
+| `instructions` | `string` | No       | Base prompt for this call; overrides `text-instructions.txt`.              |
+| `apiKey`       | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.      |
+
+Returns `{ success, text }` on success, or `{ success: false, error }`. The
+model defaults to `gemini-2.5-flash` (`GEMINI_TEXT_MODEL` to override).
+
 The reference images and system prompt are read from an assets directory,
 and the model defaults to `gemini-2.5-flash-image` — both configurable via
 the [environment variables above](#configuration).
@@ -120,6 +162,13 @@ resulting image to disk. Run it with:
 
 ```bash
 bun run example
+```
+
+`examples/transform-text.ts` does the same for text: it rewrites a sample
+product description into a Facebook post.
+
+```bash
+bun run example:text
 ```
 
 ## Hosting the Demo

@@ -1,2 +1,8 @@
 export { generateIcon } from './iconGenerator';
-export type { IconGenerationRequest, IconGenerationResult } from './types';
+export { generateText } from './textGenerator';
+export type {
+  IconGenerationRequest,
+  IconGenerationResult,
+  TextGenerationRequest,
+  TextGenerationResult,
+} from './types';

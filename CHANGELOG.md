@@ -4,6 +4,12 @@
 
 ### Added
 
+- `generateText()`: a text counterpart to `generateIcon()`. A base prompt
+  (`text-instructions.txt` in the assets directory, or the `instructions`
+  option) transforms input text like a Gemini Gem. The default prompt turns
+  a product description into a Facebook post. Model configurable via
+  `GEMINI_TEXT_MODEL` (default `gemini-2.5-flash`); new
+  `examples/transform-text.ts` (`bun run example:text`).
 - Vercel deployment for the browser demo: web-handler serverless functions
   (`api/defaults.ts`, `api/generate.ts`) that reuse the demo's serialized
   `generateWithUploads` (writing per-request temp assets under `/tmp`), plus

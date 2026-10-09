@@ -1,0 +1,8 @@
+Please rewrite and punch up the following product description for a Facebook post.
+
+- Do not use emojis.
+- Target an 8th-grade reading level for maximum understanding.
+- Make it shorter than the original and more of a call to action.
+- Do not invent prices, discounts, or claims that are not in the description.
+
+Return only the finished post, with no preface, explanation, or alternatives.
