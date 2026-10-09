@@ -1,6 +1,6 @@
 {
   "name": "@richardmcquiston01/gemini-icon-gen",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Generate style-consistent icons with Google's Gemini image API, the same way a Gemini \"Gem\" does — system instructions plus reference images in, a matching icon out.",
   "type": "module",
   "license": "Apache-2.0",

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-09
+
 ### Added
 
 - `generateText()`: a text counterpart to `generateIcon()`. A base prompt
