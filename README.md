@@ -39,7 +39,7 @@ Set these as environment variables (e.g. in a `.env` file — see
 | Variable             | Required | Purpose                                                                 |
 | -------------------- | -------- | ----------------------------------------------------------------------- |
 | `GEMINI_API_KEY`     | Yes      | Your Google Gemini API key                                              |
-| `GEMINI_IMAGE_MODEL` | No       | Overrides the default image-generation model                            |
+| `GEMINI_IMAGE_MODEL` | No       | Overrides the default image model (`generateIcon`, `editImage`)         |
 | `GEMINI_TEXT_MODEL`  | No       | Overrides the default text-generation model                             |
 | `GEMINI_ASSETS_DIR`  | No       | Overrides where `gem-instructions.txt` / `icon-examples/` / `text-instructions.txt` are read from |
 | `DEMO_PORT`          | No       | Port the browser demo server listens on (default `3000`)               |
@@ -101,6 +101,30 @@ if (result.success) {
 The base prompt is read from `text-instructions.txt` in the assets
 directory, or pass `instructions` to set it per call.
 
+### Editing an image
+
+`editImage()` changes an existing photo according to a prompt, such as
+a new background or better lighting. It reads nothing from the assets
+directory: you pass the image (base64) and the prompt.
+
+```ts
+import { readFile, writeFile } from "node:fs/promises";
+import { editImage } from "@richardmcquiston01/gemini-icon-gen";
+
+const photo = await readFile("product.jpg");
+const result = await editImage({
+  image: { data: photo.toString("base64"), mimeType: "image/jpeg" },
+  prompt: "Place the product on a light oak table in soft daylight.",
+  instructions: "Keep the product exactly as it is. Do not add text.",
+});
+
+if (result.success && result.imageData) {
+  await writeFile("edited.png", Buffer.from(result.imageData, "base64"));
+} else {
+  console.error(result.error);
+}
+```
+
 ## API reference
 
 ### `generateIcon(request)`
@@ -144,10 +168,32 @@ function generateText(
 | -------------- | -------- | -------- | -------------------------------------------------------------------------- |
 | `input`        | `string` | Yes      | The text to transform.                                                     |
 | `instructions` | `string` | No       | Base prompt for this call; overrides `text-instructions.txt`.              |
+| `model`        | `string` | No       | Model for this call; overrides `GEMINI_TEXT_MODEL`.                        |
 | `apiKey`       | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.      |
 
 Returns `{ success, text }` on success, or `{ success: false, error }`. The
 model defaults to `gemini-2.5-flash` (`GEMINI_TEXT_MODEL` to override).
+
+### `editImage(request)`
+
+```ts
+function editImage(request: ImageEditRequest): Promise<ImageEditResult>;
+```
+
+| Field             | Type            | Required | Description                                                           |
+| ----------------- | --------------- | -------- | --------------------------------------------------------------------- |
+| `image`           | `InlineImage`   | Yes      | The image to edit: `{ data, mimeType }`, base64, PNG/JPEG/WebP.        |
+| `prompt`          | `string`        | Yes      | What to change.                                                       |
+| `instructions`    | `string`        | No       | System instruction, e.g. rules the edit must keep to.                 |
+| `referenceImages` | `InlineImage[]` | No       | Extra images sent after `image`, e.g. a background to match.          |
+| `model`           | `string`        | No       | Model for this call; overrides `GEMINI_IMAGE_MODEL`.                  |
+| `apiKey`          | `string`        | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var. |
+
+Returns `{ success: true, imageData, mimeType, text? }` (`text` is any
+note Gemini sent with the image) or `{ success: false, error }`; with no
+image in the reply, the error carries Gemini's finish reason and text.
+The model defaults to `gemini-2.5-flash-image`, the same as
+`generateIcon()`.
 
 The reference images and system prompt are read from an assets directory,
 and the model defaults to `gemini-2.5-flash-image` — both configurable via

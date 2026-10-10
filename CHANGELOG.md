@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Added
+
+- `editImage()`: edits an existing image from a prompt, with optional
+  `instructions` (system instruction), `referenceImages` and a per-call
+  `model` (else `GEMINI_IMAGE_MODEL`, else `gemini-2.5-flash-image`). PNG,
+  JPEG and WebP; reads nothing from the assets directory and never writes
+  to disk. A reply without an image returns an error with Gemini's finish
+  reason and text. New types `ImageEditRequest`, `ImageEditResult` and
+  `InlineImage`.
+- `generateText()` takes an optional per-call `model`.
+- `generateIcon()` and `editImage()` share one internal default image
+  model, so there is still one default per model kind.
+
 ## [0.2.0] - 2026-10-09
 
 ### Added
