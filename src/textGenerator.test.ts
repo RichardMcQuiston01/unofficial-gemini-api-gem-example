@@ -80,6 +80,16 @@ describe('generateText', () => {
     expect(args.config.systemInstruction).toBe('Inline prompt.');
   });
 
+  it('prefers request.model over GEMINI_TEXT_MODEL', async () => {
+    process.env.GEMINI_TEXT_MODEL = 'env-model';
+    mockGenerateContent.mockResolvedValue(textResponse('ok'));
+    const generateText = await freshGenerateText();
+
+    await generateText({ input: 'x', model: 'request-model' });
+
+    expect(mockGenerateContent.mock.calls[0][0].model).toBe('request-model');
+  });
+
   it('omits systemInstruction when none is available', async () => {
     mockGenerateContent.mockResolvedValue(textResponse('ok'));
     const generateText = await freshGenerateText();

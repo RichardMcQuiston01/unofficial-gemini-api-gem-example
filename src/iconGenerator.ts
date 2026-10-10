@@ -4,7 +4,8 @@ import { assetsDir } from './assetsDir';
 import { getGeminiClient } from './client';
 import type { IconGenerationRequest, IconGenerationResult } from './types';
 
-const DEFAULT_MODEL = 'gemini-2.5-flash-image';
+/** The one default image model, shared by generateIcon and editImage. */
+export const DEFAULT_IMAGE_MODEL = 'gemini-2.5-flash-image';
 
 const SUPPORTED_IMAGE_TYPES: Record<string, string> = {
   '.png': 'image/png',
@@ -57,7 +58,7 @@ export async function generateIcon(
   request: IconGenerationRequest,
 ): Promise<IconGenerationResult> {
   const client = getGeminiClient(request.apiKey);
-  const model = process.env.GEMINI_IMAGE_MODEL ?? DEFAULT_MODEL;
+  const model = process.env.GEMINI_IMAGE_MODEL ?? DEFAULT_IMAGE_MODEL;
   const dir = assetsDir();
 
   const [systemInstruction, exampleParts] = await Promise.all([
