@@ -172,7 +172,7 @@ function generateText(
 | `apiKey`       | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.      |
 
 Returns `{ success, text }` on success, or `{ success: false, error }`. The
-model defaults to `gemini-2.5-flash` (`GEMINI_TEXT_MODEL` to override).
+model defaults to `gemini-3.8-flash` (`GEMINI_TEXT_MODEL` to override).
 
 ### `editImage(request)`
 
