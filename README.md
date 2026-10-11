@@ -1,88 +1,74 @@
-# unofficial-gemini-api-gem-example
+# gemini-icon-gen
 
-- Author: Richard McQuiston
-- Website: [https://richardmcquiston.com/](https://richardmcquiston.com/)
-- Demo: [https://gemini-icon-gen.vercel.app/](https://gemini-icon-gen.vercel.app/)
-- Email: [richard.mcquiston01@gmail.com](mailto:richard.mcquiston01@gmail.com)
-
-```
-Disclaimer: This is an independent, unofficial project (see the "unofficial-" prefix in the name) and is not affiliated with, endorsed by, or sponsored by Google or Gemini. "Gemini" is a trademark of Google LLC, used here only in a descriptive, nominative sense to indicate compatibility — not to imply any official status.
-```
+Generate style-consistent images and text with Google's Gemini API, the
+same way a Gemini "Gem" does: give it instructions plus reference images,
+get a new image that matches.
 
 [![CI](https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example/actions/workflows/ci.yml/badge.svg)](https://github.com/RichardMcQuiston01/unofficial-gemini-api-gem-example/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@richardmcquiston01/gemini-icon-gen.svg)](https://www.npmjs.com/package/@richardmcquiston01/gemini-icon-gen)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/license/apache-2-0/)
 
-## Overview
+> **Disclaimer:** This is an independent, unofficial project and is not
+> affiliated with, endorsed by, or sponsored by Google. "Gemini" is a
+> trademark of Google LLC, used here only to indicate compatibility.
 
-This package makes images with Google's Gemini AI. You give it a few
-example pictures and some written instructions. Gemini then draws a new
-image that matches the look of your examples.
+**[Try the live demo](https://gemini-icon-gen.vercel.app/)** · Bring your
+own Gemini API key.
 
-I needed hundreds of icons for a website, and they all had to look like
-they belonged together. I first used a Gemini "Gem" to make them. Then I
-wrote code so the same job could run automatically. It made hundreds of
-icons in just a few minutes.
+## Why
 
-Now I've turned that code into a package so you can use it too.
+I needed hundreds of icons for a website that all looked like they
+belonged together. I prototyped with a Gemini Gem, then wrote code to run
+the same job automatically: hundreds of icons in a few minutes. This
+package is that code.
 
-## Prerequisites
+## Features
 
-- Node.js 24.19.0 (LTS)
-- A Google Gemini API key ([ai.google.dev](https://ai.google.dev))
-
-## Configuration
-
-Set these as environment variables (e.g. in a `.env` file — see
-`.env.example`):
-
-| Variable             | Required | Purpose                                                                 |
-| -------------------- | -------- | ----------------------------------------------------------------------- |
-| `GEMINI_API_KEY`     | Yes      | Your Google Gemini API key                                              |
-| `GEMINI_IMAGE_MODEL` | No       | Overrides the default image model (`generateIcon`, `editImage`)         |
-| `GEMINI_TEXT_MODEL`  | No       | Overrides the default text-generation model                             |
-| `GEMINI_ASSETS_DIR`  | No       | Overrides where `gem-instructions.txt` / `icon-examples/` / `text-instructions.txt` are read from |
-| `DEMO_PORT`          | No       | Port the browser demo server listens on (default `3000`)               |
+- **`generateIcon()`**: new image in the style of your reference images
+  and system instructions.
+- **`generateText()`**: rewrite input text using a reusable base prompt.
+- **`editImage()`**: change an existing image from a prompt.
+- Typed API, shipped as both ESM and CommonJS.
+- Never writes to disk. You decide where the output goes.
 
 ## Installation
 
+Requires Node.js 20+ and a [Gemini API key](https://ai.google.dev).
+
 ```bash
-bun add @richardmcquiston01/gemini-icon-gen
-# or
 npm install @richardmcquiston01/gemini-icon-gen
+# or
+bun add @richardmcquiston01/gemini-icon-gen
 ```
 
-## Usage
-
-Set `GEMINI_API_KEY` (see [Configuration](#configuration)), then:
+## Quick start
 
 ```ts
-import { generateIcon } from "@richardmcquiston01/gemini-icon-gen";
 import { writeFile } from "node:fs/promises";
+import { generateIcon } from "@richardmcquiston01/gemini-icon-gen";
 
 const result = await generateIcon({
   subject: "CO2 Laser Engraver",
   styleNotes: "Include a small flame icon in the corner", // optional
 });
 
-if (result.success) {
-  // result.imageData is base64; the library never writes to disk itself.
-  await writeFile("icon.png", Buffer.from(result.imageData ?? "", "base64"));
+if (result.success && result.imageData) {
+  await writeFile("icon.png", Buffer.from(result.imageData, "base64"));
 } else {
   console.error(result.error);
 }
 ```
 
-Reference images (style examples) and the system prompt
-(`gem-instructions.txt`) are read from an assets directory — see
-[Configuration](#configuration) for how to point at your own.
+Set `GEMINI_API_KEY` first (see [Configuration](#configuration)). Without
+your own assets directory, the bundled style references and instructions
+are used.
 
-### Transforming text
+## Usage
 
-`generateText()` is the text version of `generateIcon()`. A base prompt
-works like a Gem's instructions, and your input text is rewritten to
-match. The bundled default turns a product description into a short
-Facebook post.
+### Generate text
+
+A base prompt acts like a Gem's instructions. The bundled default turns a
+product description into a short Facebook post.
 
 ```ts
 import { generateText } from "@richardmcquiston01/gemini-icon-gen";
@@ -91,21 +77,13 @@ const result = await generateText({
   input: "Handmade soy candle, 8oz, lavender and cedarwood scent.",
 });
 
-if (result.success) {
-  console.log(result.text);
-} else {
-  console.error(result.error);
-}
+console.log(result.success ? result.text : result.error);
 ```
 
-The base prompt is read from `text-instructions.txt` in the assets
-directory, or pass `instructions` to set it per call.
+### Edit an image
 
-### Editing an image
-
-`editImage()` changes an existing photo according to a prompt, such as
-a new background or better lighting. It reads nothing from the assets
-directory: you pass the image (base64) and the prompt.
+`editImage()` reads nothing from the assets directory: pass the image
+(base64) and a prompt.
 
 ```ts
 import { readFile, writeFile } from "node:fs/promises";
@@ -125,7 +103,40 @@ if (result.success && result.imageData) {
 }
 ```
 
+## Configuration
+
+Set environment variables directly or in a `.env` file (see
+`.env.example`).
+
+| Variable             | Required | Purpose                                                              |
+| -------------------- | -------- | -------------------------------------------------------------------- |
+| `GEMINI_API_KEY`     | Yes\*    | Your Gemini API key. \*Not needed if you pass `apiKey` per call.      |
+| `GEMINI_IMAGE_MODEL` | No       | Overrides the image model (`generateIcon`, `editImage`).             |
+| `GEMINI_TEXT_MODEL`  | No       | Overrides the text model (`generateText`).                           |
+| `GEMINI_ASSETS_DIR`  | No       | Directory to read the files listed below from.                       |
+| `DEMO_PORT`          | No       | Port for the browser demo server (default `3000`).                   |
+
+Default models: `gemini-2.5-flash-image` (image) and `gemini-3.8-flash`
+(text).
+
+### Assets directory
+
+`generateIcon()` and `generateText()` read from `GEMINI_ASSETS_DIR`, or the
+package's bundled `assets/` if unset:
+
+```
+assets/
+  gem-instructions.txt    # system instruction for generateIcon()
+  text-instructions.txt   # base prompt for generateText()
+  icon-examples/          # style references (.png .jpg .jpeg .webp)
+```
+
+A missing `icon-examples/` logs a warning and continues without
+references. A missing instructions file is simply omitted.
+
 ## API reference
+
+Each function returns a result object; check `success` before using it.
 
 ### `generateIcon(request)`
 
@@ -135,26 +146,14 @@ function generateIcon(
 ): Promise<IconGenerationResult>;
 ```
 
-Generates a single icon matching the style of the reference images and
-system instructions in the configured assets directory. It never writes
-to disk — persist `imageData` yourself.
+| Field        | Type     | Required | Description                                          |
+| ------------ | -------- | -------- | ---------------------------------------------------- |
+| `subject`    | `string` | Yes      | Short label for the subject, e.g. `"CO2 Laser"`.     |
+| `styleNotes` | `string` | No       | Extra style notes appended to the prompt.            |
+| `apiKey`     | `string` | No       | Overrides `GEMINI_API_KEY` for this call.            |
 
-**`IconGenerationRequest`**
-
-| Field        | Type     | Required | Description                                                                        |
-| ------------ | -------- | -------- | ---------------------------------------------------------------------------------- |
-| `subject`    | `string` | Yes      | Short label for the subject, e.g. `"CO2 Laser Engraver"`.                           |
-| `styleNotes` | `string` | No       | Extra style notes appended to the prompt, e.g. `"Include a small flame in the corner"`. |
-| `apiKey`     | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.               |
-
-**`IconGenerationResult`**
-
-| Field       | Type      | Description                                                     |
-| ----------- | --------- | -------------------------------------------------------------- |
-| `success`   | `boolean` | Whether an image was generated.                               |
-| `imageData` | `string`  | Base64-encoded image bytes. Present on success.               |
-| `mimeType`  | `string`  | MIME type of `imageData`, e.g. `"image/png"`. Present on success. |
-| `error`     | `string`  | Failure reason. Present when `success` is `false`.            |
+Returns `{ success: true, imageData, mimeType }` (base64 image bytes and
+MIME type such as `image/png`) or `{ success: false, error }`.
 
 ### `generateText(request)`
 
@@ -164,15 +163,14 @@ function generateText(
 ): Promise<TextGenerationResult>;
 ```
 
-| Field          | Type     | Required | Description                                                                |
-| -------------- | -------- | -------- | -------------------------------------------------------------------------- |
-| `input`        | `string` | Yes      | The text to transform.                                                     |
-| `instructions` | `string` | No       | Base prompt for this call; overrides `text-instructions.txt`.              |
-| `model`        | `string` | No       | Model for this call; overrides `GEMINI_TEXT_MODEL`.                        |
-| `apiKey`       | `string` | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var.      |
+| Field          | Type     | Required | Description                                       |
+| -------------- | -------- | -------- | ------------------------------------------------- |
+| `input`        | `string` | Yes      | The text to transform.                            |
+| `instructions` | `string` | No       | Base prompt; overrides `text-instructions.txt`.   |
+| `model`        | `string` | No       | Overrides `GEMINI_TEXT_MODEL` for this call.      |
+| `apiKey`       | `string` | No       | Overrides `GEMINI_API_KEY` for this call.         |
 
-Returns `{ success, text }` on success, or `{ success: false, error }`. The
-model defaults to `gemini-3.8-flash` (`GEMINI_TEXT_MODEL` to override).
+Returns `{ success: true, text }` or `{ success: false, error }`.
 
 ### `editImage(request)`
 
@@ -180,75 +178,70 @@ model defaults to `gemini-3.8-flash` (`GEMINI_TEXT_MODEL` to override).
 function editImage(request: ImageEditRequest): Promise<ImageEditResult>;
 ```
 
-| Field             | Type            | Required | Description                                                           |
-| ----------------- | --------------- | -------- | --------------------------------------------------------------------- |
-| `image`           | `InlineImage`   | Yes      | The image to edit: `{ data, mimeType }`, base64, PNG/JPEG/WebP.        |
-| `prompt`          | `string`        | Yes      | What to change.                                                       |
-| `instructions`    | `string`        | No       | System instruction, e.g. rules the edit must keep to.                 |
-| `referenceImages` | `InlineImage[]` | No       | Extra images sent after `image`, e.g. a background to match.          |
-| `model`           | `string`        | No       | Model for this call; overrides `GEMINI_IMAGE_MODEL`.                  |
-| `apiKey`          | `string`        | No       | Gemini API key for this call; overrides the `GEMINI_API_KEY` env var. |
+| Field             | Type            | Required | Description                                             |
+| ----------------- | --------------- | -------- | ------------------------------------------------------- |
+| `image`           | `InlineImage`   | Yes      | Image to edit: `{ data, mimeType }`, base64 PNG/JPEG/WebP. |
+| `prompt`          | `string`        | Yes      | What to change.                                         |
+| `instructions`    | `string`        | No       | System instruction, e.g. rules the edit must keep.      |
+| `referenceImages` | `InlineImage[]` | No       | Extra images sent after `image`, e.g. a background.     |
+| `model`           | `string`        | No       | Overrides `GEMINI_IMAGE_MODEL` for this call.           |
+| `apiKey`          | `string`        | No       | Overrides `GEMINI_API_KEY` for this call.               |
 
-Returns `{ success: true, imageData, mimeType, text? }` (`text` is any
-note Gemini sent with the image) or `{ success: false, error }`; with no
-image in the reply, the error carries Gemini's finish reason and text.
-The model defaults to `gemini-2.5-flash-image`, the same as
-`generateIcon()`.
+Returns `{ success: true, imageData, mimeType, text? }` (`text` is any note
+Gemini sent with the image) or `{ success: false, error }`. If Gemini
+replies without an image, the error includes its finish reason and text.
 
-The reference images and system prompt are read from an assets directory,
-and the model defaults to `gemini-2.5-flash-image` — both configurable via
-the [environment variables above](#configuration).
+## Examples and demo
 
-## Examples
-
-`examples/generate-icon.ts` is a runnable end-to-end demo: it loads the
-committed `assets/gem-instructions.txt` and a few reference icons from
-`assets/icon-examples/`, calls `generateIcon()`, and writes the
-resulting image to disk. Run it with:
+Runnable scripts live in `examples/` and need `GEMINI_API_KEY`:
 
 ```bash
-bun run example
+bun run example        # generateIcon() with the bundled assets
+bun run example:text   # generateText() on a sample product description
 ```
 
-`examples/transform-text.ts` does the same for text: it rewrites a sample
-product description into a Facebook post.
-
-```bash
-bun run example:text
-```
-
-## Hosting the Demo
-
-Want to run the browser demo yourself? See the
+The `demo/` directory is a browser app where you enter your own API key,
+upload reference images, edit the prompt, and generate an icon. See the
 [demo hosting guide](docs/DEMO.md) for Docker and Vercel instructions.
+
+## Development
+
+```bash
+bun install
+bun run typecheck   # tsc --noEmit
+bun run test        # vitest
+bun run build       # tsup → dist/ (ESM + CJS + .d.ts)
+```
 
 ## Troubleshooting
 
-- **`GEMINI_API_KEY is not set`** — set the env var (see Configuration);
-  the client throws immediately rather than making a doomed request.
-- **`Gemini returned no image data...`** — the API responded without an
-  image part. Check that your API key is valid and that the configured
-  model supports image generation.
-- **Style references are ignored** — only `.png`, `.jpg`, `.jpeg`, and
-  `.webp` files under `icon-examples/` are read; other extensions are
-  skipped silently.
+- **`GEMINI_API_KEY is not set`**: set the variable or pass `apiKey`. The
+  client fails immediately rather than sending a doomed request.
+- **`Gemini returned no image data...`**: the API replied without an image.
+  Check that your key is valid and the model supports image output.
+- **Style references ignored**: only `.png`, `.jpg`, `.jpeg` and `.webp`
+  files in `icon-examples/` are read; other files are skipped silently.
+- **Model not found (404)**: Google retires models over time. Set
+  `GEMINI_IMAGE_MODEL` or `GEMINI_TEXT_MODEL` to a currently available one.
 
 ## License
 
-[Apache-2.0](https://opensource.org/license/apache-2-0/)
+[Apache-2.0](LICENSE). Copyright (c) 2026 Richard McQuiston. This
+copyright covers the original code and content of this project only; it
+grants no rights to the "Gemini" name or any Google trademarks, which
+remain the property of Google LLC.
 
-## Copyright
+## Author
 
-Copyright (c) 2026 Richard McQuiston
+Richard McQuiston · [richardmcquiston.com](https://richardmcquiston.com/) ·
+[richard.mcquiston01@gmail.com](mailto:richard.mcquiston01@gmail.com)
 
-This copyright applies to the original code and content of this project only.
-It does not extend to, and no license is granted for, use of the "Gemini"
-name or any Google trademarks, which remain the property of Google LLC.
+## Buy me a coffee
 
-## Buy Me a Coffee
+If this project helped you, please consider donating to help offset
+development costs and AI credits.
 
-If this app, code, or repository has helped you or someone you know, please consider donating. I appreciate any help to offset the costs of development and/or AI Credits.
-
-[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800), or scan:
+[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800),
+or scan:
 
 [![Donate via Stripe](./donate.svg)](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800)
