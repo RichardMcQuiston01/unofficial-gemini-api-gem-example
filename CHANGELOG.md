@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-11
+
 ### Changed
 
 - The default text model is now `gemini-3.8-flash`: Google no longer offers
