@@ -146,7 +146,7 @@ export interface IconGenerationResult {
 
 **Gotcha carried forward from the port:** crafterkit had two disagreeing
 default model names — `gemini-2.5-flash-image` in the generator itself
-vs. `gemini-2.5-flash-preview-05-20` in an app-specific rate-limit check
+vs. `gemini-3.8-flash-preview-05-20` in an app-specific rate-limit check
 that isn't being ported. This package should have exactly **one**
 configurable default per model kind (image, text); don't reintroduce a second hardcoded model name
 anywhere.

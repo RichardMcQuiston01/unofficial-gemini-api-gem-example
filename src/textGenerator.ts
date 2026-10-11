@@ -4,7 +4,7 @@ import { assetsDir } from './assetsDir';
 import { getGeminiClient } from './client';
 import type { TextGenerationRequest, TextGenerationResult } from './types';
 
-const DEFAULT_TEXT_MODEL = 'gemini-2.5-flash';
+const DEFAULT_TEXT_MODEL = 'gemini-3.8-flash';
 
 async function loadTextInstructions(dir: string): Promise<string> {
   try {
