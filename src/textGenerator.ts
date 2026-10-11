@@ -29,7 +29,8 @@ export async function generateText(
   }
 
   const client = getGeminiClient(request.apiKey);
-  const model = process.env.GEMINI_TEXT_MODEL ?? DEFAULT_TEXT_MODEL;
+  const model =
+    request.model?.trim() || process.env.GEMINI_TEXT_MODEL || DEFAULT_TEXT_MODEL;
   const systemInstruction =
     request.instructions?.trim() || (await loadTextInstructions(assetsDir()));
 

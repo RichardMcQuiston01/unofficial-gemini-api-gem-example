@@ -34,8 +34,9 @@ src/
   client.ts        # GoogleGenAI singleton, reads GEMINI_API_KEY
   iconGenerator.ts # generateIcon() — the package's core export
   textGenerator.ts # generateText() — Gem-style text transformation
+  imageEditor.ts   # editImage() — edit a given image from a prompt
   assetsDir.ts     # shared assets dir resolution
-  types.ts         # Icon*/Text* request and result types
+  types.ts         # Icon*/Text*/ImageEdit* request and result types
   index.ts         # public exports (re-exports the above)
 examples/
   generate-icon.ts # runnable CLI demo — see "Examples" in README
@@ -139,7 +140,7 @@ export interface IconGenerationResult {
 | Env var | Required | Purpose |
 |---|---|---|
 | `GEMINI_API_KEY` | Yes | Google Gemini API key |
-| `GEMINI_IMAGE_MODEL` | No | Overrides the default image-generation model |
+| `GEMINI_IMAGE_MODEL` | No | Overrides the default image model (`generateIcon`, `editImage`) |
 | `GEMINI_TEXT_MODEL` | No | Overrides the default text-generation model (`generateText`) |
 | `GEMINI_ASSETS_DIR` | No | Overrides where `gem-instructions.txt` / `icon-examples/` / `text-instructions.txt` are read from |
 
