@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-11
+
+### Changed
+
+- The default text model is now `gemini-3.8-flash`: Google no longer offers
+  `gemini-2.5-flash` to new API keys (404 "no longer available to new
+  users"). `GEMINI_TEXT_MODEL` and the per-call `model` still override it.
+
 ## [0.3.0] - 2026-10-10
 
 ### Added

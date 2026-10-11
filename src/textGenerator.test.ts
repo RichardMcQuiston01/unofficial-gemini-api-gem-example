@@ -62,7 +62,7 @@ describe('generateText', () => {
 
     expect(result).toEqual({ success: true, text: 'Short post' });
     const args = mockGenerateContent.mock.calls[0][0];
-    expect(args.model).toBe('gemini-2.5-flash');
+    expect(args.model).toBe('gemini-3.8-flash');
     expect(args.config.systemInstruction).toBe('Be brief.');
     expect(args.contents[0].parts).toEqual([{ text: 'A candle' }]);
   });
