@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-19
+
 ### Added
 
 - `funding` field in `package.json` so `npm fund` and the npm page show the
