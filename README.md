@@ -236,12 +236,10 @@ remain the property of Google LLC.
 Richard McQuiston · [richardmcquiston.com](https://richardmcquiston.com/) ·
 [richard.mcquiston01@gmail.com](mailto:richard.mcquiston01@gmail.com)
 
-## Buy me a coffee
+## Buy Me a Coffee
 
-If this project helped you, please consider donating to help offset
-development costs and AI credits.
+If this app, code, or repository has helped you or someone you know, please consider donating. I appreciate any help to offset the costs of development and/or AI Credits.
 
-[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800),
-or scan:
+[**Donate via Stripe**](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800), or scan:
 
 [![Donate via Stripe](./donate.svg)](https://donate.stripe.com/00w5kD3Gj1Xo9v7gVOcs800)

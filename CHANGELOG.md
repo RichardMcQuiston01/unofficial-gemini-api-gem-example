@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-19
+
+### Added
+
+- `funding` field in `package.json` so `npm fund` and the npm page show the
+  donate link.
+
+### Changed
+
+- README "Buy Me a Coffee" section now uses the standard donation wording.
+
 ## [0.3.1] - 2026-10-11
 
 ### Changed
